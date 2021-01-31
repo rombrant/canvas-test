@@ -1,5 +1,5 @@
-import { AbstarctCanvasDeclaration } from '/abstractCanvas.js';
-import { subCanvas } from '/index.js';
+import { AbstarctCanvasDeclaration } from './abstractCanvas.js';
+import { subCanvas } from './index.js';
 
 export class MainCanvasDeclaration extends AbstarctCanvasDeclaration {
   constructor(stars = ["#000000"], width, height, className) {

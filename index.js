@@ -1,6 +1,6 @@
-import { MainCanvasDeclaration } from '/mainCanvas.js';
-import { SubmissiveCanvasDeclaration } from '/subCanvas.js';
-import { assetOfStars } from '/asset.js';
+import { MainCanvasDeclaration } from './mainCanvas.js';
+import { SubmissiveCanvasDeclaration } from './subCanvas.js';
+import { assetOfStars } from './asset.js';
 
 const mainCanvas = new MainCanvasDeclaration(assetOfStars, 600, 600, 'mainCanvas');
 mainCanvas.init();
