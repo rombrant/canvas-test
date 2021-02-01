@@ -16,7 +16,7 @@ export class MainCanvasDeclaration extends AbstarctCanvasDeclaration {
     starPoints.push(new THREE.Vector2( 5, 5));
     starPoints.push(new THREE.Vector2( 20, 5));
     starPoints.push(new THREE.Vector2( 10, -5));
-    starPoints.push(new THREE.Vector2( 15, -20));
+    starPoints.push(new THREE.Vector2( 10, -20));
     starPoints.push(new THREE.Vector2( 0, -10));
     starPoints.push(new THREE.Vector2( -10, -20));
     starPoints.push(new THREE.Vector2( -10, -5));
