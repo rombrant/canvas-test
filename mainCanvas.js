@@ -1,77 +1,64 @@
-import { AbstarctCanvasDeclaration } from './abstractCanvas.js';
-import { subCanvas } from './index.js';
+import { assetOfStars } from "./asset.js";
+import { ctx, canvas, subCtx } from "./index.js";
 
-export class MainCanvasDeclaration extends AbstarctCanvasDeclaration {
-  constructor(stars = ["#000000"], width, height, className) {
-    super(width, height, className);
+export class MainCanvasDeclaration {
+  constructor(stars) {
     this.stars = stars;
   }
 
-  createGeometry = (index, color) => {
-    const starPoints = [];
-    const leftPadding = index * 40;
+  createGeometry = (cx, cy, spikes, outerRadius, innerRadius, color, id) => {
+    var rot = (Math.PI / 2) * 3;
+    var x = cx;
+    var y = 100;
+    var step = Math.PI / spikes;
 
-    // Set vectors of future star
-    starPoints.push(new THREE.Vector2( 0, 20));
-    starPoints.push(new THREE.Vector2( 5, 5));
-    starPoints.push(new THREE.Vector2( 20, 5));
-    starPoints.push(new THREE.Vector2( 10, -5));
-    starPoints.push(new THREE.Vector2( 10, -20));
-    starPoints.push(new THREE.Vector2( 0, -10));
-    starPoints.push(new THREE.Vector2( -10, -20));
-    starPoints.push(new THREE.Vector2( -10, -5));
-    starPoints.push(new THREE.Vector2( -20, 5));
-    starPoints.push(new THREE.Vector2( -5, 5));
+    ctx.strokeSyle = "#000";
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - outerRadius);
+    for (let i = 0; i < spikes; i++) {
+      x = cx + Math.cos(rot) * outerRadius;
+      y = cy + Math.sin(rot) * outerRadius;
+      ctx.lineTo(x, y);
+      rot += step;
 
-    const starShape = new THREE.Shape(starPoints);
-
-    const geometry = new THREE.ShapeGeometry(starShape);
-
-    // set color of star
-    const material = new THREE.MeshBasicMaterial({
-      color: color,
-      side: THREE.DoubleSide,
-    });
-
-    // finaly set position add to scene
-    const star = new THREE.Mesh(geometry, material);
-    star.position.set(leftPadding - 80, 0, 0);
-    this.scene.add(star);
+      x = cx + Math.cos(rot) * innerRadius;
+      y = cy + Math.sin(rot) * innerRadius;
+      ctx.lineTo(x, y);
+      rot += step;
+    }
+    ctx.lineTo(cx, cy - outerRadius);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.addHitRegion({ id: id });
   };
 
   onStarClickMouse = (e) => {
-      const rayCast = new THREE.Raycaster();
-      const mouse = new THREE.Vector2();
 
-    //   normalize mouse object
-      mouse.x = (e.clientX / this.SCREEN_WIDTH) * 2 - 1;
-      mouse.y = - (e.clientY / this.SCREEN_HEIGHT) * 2 + 1;
-      mouse.z = 1;
+    if (e.region === null){ 
+      subCtx.fillStyle = '#ffffff';
+      subCtx.fillRect(0, 0, 600, 50);
+      return;
+    }
 
-    // get list of object which ray intersect
-      rayCast.setFromCamera(mouse, this.camera);
-      const intersects = rayCast.intersectObjects(this.scene.children);
-
-      if (intersects[0] === undefined) {
-        subCanvas.onChangeBackgroundWanted();
-        return;
-      }
-
-      const color = intersects[0].object.material.color;
-      subCanvas.onChangeBackgroundWanted(color);
-  }
+    const clickedStar = assetOfStars.find(star => star.id.toString() === e.region);
+    subCtx.fillStyle = clickedStar.color;
+    subCtx.fillRect(0, 0, 600, 50);
+  };
 
   init = () => {
-    this.initiallizeScene();
+    this.stars.forEach((star) =>
+      this.createGeometry(
+        star.cx,
+        star.cy,
+        star.spikes,
+        star.outerRadius,
+        star.innerRadius,
+        star.color,
+        star.id
+      )
+    );
 
-    this.initiallizeCamera();
-
-    this.stars.forEach((star, index) => {
-        this.createGeometry(index, star)
-    });
-
-    this.initiallizeRender();
-
-    document.addEventListener('click', this.onStarClickMouse, false);
+    canvas.addEventListener("click", this.onStarClickMouse, false);
   };
 }

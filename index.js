@@ -1,13 +1,13 @@
 import { MainCanvasDeclaration } from './mainCanvas.js';
-import { SubmissiveCanvasDeclaration } from './subCanvas.js';
 import { assetOfStars } from './asset.js';
 
-const mainCanvas = new MainCanvasDeclaration(assetOfStars, 600, 600, 'mainCanvas');
+const canvas = document.querySelector(".mainCanvas");
+const ctx = canvas.getContext("2d");
+
+const subCanvas = document.querySelector(".subCanvas");
+const subCtx = subCanvas.getContext("2d");
+
+const mainCanvas = new MainCanvasDeclaration(assetOfStars);
 mainCanvas.init();
-mainCanvas.mainLoop();
 
-const subCanvas = new SubmissiveCanvasDeclaration(600, 50, 'subCanvas');
-subCanvas.init();
-subCanvas.mainLoop();
-
-export { subCanvas };
+export { ctx, canvas, subCanvas, subCtx };

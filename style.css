@@ -2,16 +2,3 @@
     padding: 0;
     margin: 0;
 }
-
-.wrapper {
-    display: flex;
-    width: 100%;
-}
-
-.subCanvas {
-    padding-left: 10px;
-}
-
-.mainCanvas {
-    padding-right: 10px;
-}
